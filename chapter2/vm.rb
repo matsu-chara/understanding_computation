@@ -4,6 +4,7 @@ require './variable.rb'
 require './nothing.rb'
 require './assign.rb'
 require './if.rb'
+require './sequence.rb'
 
 class Machine < Struct.new(:statement, :environment)
   def step
@@ -54,4 +55,13 @@ Machine.new(
     Assign.new(:y, Number.new(2))
   ),
   { x: Boolean.new(true) }
+).run
+
+puts ""
+Machine.new(
+  Sequence.new(
+  Assign.new(:x, Add.new(Number.new(1), Number.new(1))),
+  Assign.new(:y, Add.new(Variable.new(:x), Number.new(3)))
+  ),
+  {}
 ).run

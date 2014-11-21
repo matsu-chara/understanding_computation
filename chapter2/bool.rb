@@ -14,6 +14,10 @@ class Boolean < Struct.new(:value)
   def evaluate(environment)
     self
   end
+
+  def to_ruby
+    "-> e { #{value.inspect} }"
+  end
 end
 
 class LessThan < Struct.new(:left, :right)
@@ -41,5 +45,9 @@ class LessThan < Struct.new(:left, :right)
 
   def evaluate(environment)
     Boolean.new(left.evaluate(environment).value < right.evaluate(environment).value)
+  end
+
+  def to_ruby
+    "-> e { (#{left.to_ruby}).call(e) < (#{right.to_ruby}).call(e) }"
   end
 end

@@ -14,6 +14,10 @@ class Number < Struct.new(:value)
   def evaluate(environment)
     self
   end
+
+  def to_ruby
+    "-> e { #{value.inspect} }"
+  end
 end
 
 class Add < Struct.new(:left, :right)
@@ -42,6 +46,10 @@ class Add < Struct.new(:left, :right)
   def evaluate(environment)
     Number.new(left.evaluate(environment).value + right.evaluate(environment).value)
   end
+
+  def to_ruby
+    "-> e { (#{left.to_ruby}).call(e) + (#{right.to_ruby}).call(e) }"
+  end
 end
 
 class Multiply < Struct.new(:left, :right)
@@ -69,5 +77,9 @@ class Multiply < Struct.new(:left, :right)
 
   def evaluate(environment)
     Number.new(left.evaluate(environment).value * right.evaluate(environment).value)
+  end
+
+  def to_ruby
+    "-> e { (#{left.to_ruby}).call(e) * (#{right.to_ruby}).call(e) }"
   end
 end

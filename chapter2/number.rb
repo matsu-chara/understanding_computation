@@ -25,11 +25,11 @@ class Add < Struct.new(:left, :right)
       true
   end
 
-  def reduce
+  def reduce(environment)
     if left.reducible?
-      Add.new(left.reduce, right)
+      Add.new(left.reduce(environment), right)
     elsif right.reducible?
-      Add.new(left, right.reduce)
+      Add.new(left, right.reduce(environment))
     else
       Number.new(left.value + right.value)
     end
@@ -49,11 +49,11 @@ class Multiply < Struct.new(:left, :right)
       true
   end
 
-  def reduce
+  def reduce(environment)
     if left.reducible?
-      Add.new(left.reduce, right)
+      Add.new(left.reduce(environment), right)
     elsif right.reducible?
-      Add.new(left, right.reduce)
+      Add.new(left, right.reduce(environment))
     else
       Number.new(left.value * right.value)
     end

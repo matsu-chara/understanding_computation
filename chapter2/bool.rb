@@ -10,6 +10,10 @@ class Boolean < Struct.new(:value)
   def reducible?
     false
   end
+
+  def evaluate(environment)
+    self
+  end
 end
 
 class LessThan < Struct.new(:left, :right)
@@ -33,5 +37,9 @@ class LessThan < Struct.new(:left, :right)
     else
       Boolean.new(left.value < right.value)
     end
+  end
+
+  def evaluate(environment)
+    Boolean.new(left.evaluate(environment).value < right.evaluate(environment).value)
   end
 end

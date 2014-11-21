@@ -10,6 +10,10 @@ class Number < Struct.new(:value)
   def reducible?()
       false
   end
+
+  def evaluate(environment)
+    self
+  end
 end
 
 class Add < Struct.new(:left, :right)
@@ -34,6 +38,10 @@ class Add < Struct.new(:left, :right)
       Number.new(left.value + right.value)
     end
   end
+
+  def evaluate(environment)
+    Number.new(left.evaluate(environment).value + right.evaluate(environment).value)
+  end
 end
 
 class Multiply < Struct.new(:left, :right)
@@ -57,5 +65,9 @@ class Multiply < Struct.new(:left, :right)
     else
       Number.new(left.value * right.value)
     end
+  end
+
+  def evaluate(environment)
+    Number.new(left.evaluate(environment).value * right.evaluate(environment).value)
   end
 end

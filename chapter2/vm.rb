@@ -10,7 +10,7 @@ require './while.rb'
 class Machine < Struct.new(:statement, :environment)
   def step
     self.statement, e = statement.reduce(environment)
-    self.environment = e if e
+    self.environment = e if e # 環境が変更されていたら更新する
   end
 
   def run
@@ -78,3 +78,12 @@ Machine.new(
   ),
   { x: Number.new(1) }
 ).run
+
+# big step
+puts ""
+p While.new(
+  LessThan.new(Variable.new(:x), Number.new(5)),
+  Assign.new(:x, Multiply.new(Variable.new(:x), Number.new(3)))
+).evaluate(
+  { x: Number.new(1) })
+

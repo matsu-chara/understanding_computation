@@ -1,3 +1,5 @@
+require 'set'
+
 class FARule < Struct.new(:state, :character, :next_state)
   def applies_to?(state, character)
     self.state == state && self.character == character
@@ -19,5 +21,19 @@ class DFARulebook < Struct.new(:rules)
 
   def rule_for(state, character)
     rules.detect { |rule| rule.applies_to?(state, character) }
+  end
+end
+
+class NFARuleBook < Struct.new(:rules)
+  def next_states (states, character)
+    states.flat_map { |state| follow_rules_for(state, character) }.to_set
+  end
+
+  def follow_rules_for(state, character)
+    rules_for(state, character).map(&:follow)
+  end
+
+  def rules_for(state, character)
+    rules.select { |rule| rule.applies_to?(state, character) }
   end
 end

@@ -24,14 +24,22 @@ class NFA < Struct.new(:current_states, :accept_states, :rulebook)
       read_character(character)
     end
   end
+
+  def current_states
+    rulebook.follow_free_moves(super)
+  end
 end
 
-# rulebook = NFARuleBook.new([
-#   FARule.new(1, 'a', 1), FARule.new(1, 'b', 1), FARule.new(1, 'b', 2), FARule.new(1, 'b', 2),
-#     FARule.new(2, 'a', 3), FARule.new(2, 'b', 3),
-#     FARule.new(3, 'a', 4), FARule.new(3, 'b', 4)
-# ])
-# nfa_design = NFADesign.new(1, [4], rulebook)
-# p nfa_design.accepts?('bab')
-# p nfa_design.accepts?('bbbbb')
-# p nfa_design.accepts?('bbabb')
+rulebook = NFARuleBook.new([
+    FARule.new(1, nil, 2), FARule.new(1, nil, 4),
+    FARule.new(2, 'a', 3),
+    FARule.new(3, 'a', 2),
+    FARule.new(4, 'a', 5),
+    FARule.new(5, 'a', 6),
+    FARule.new(6, 'a', 4)
+])
+nfa_design = NFADesign.new(1, [2, 4], rulebook)
+p nfa_design.accepts?('aa')
+p nfa_design.accepts?('aaa')
+p nfa_design.accepts?('aaaaa')
+p nfa_design.accepts?('aaaaaa')

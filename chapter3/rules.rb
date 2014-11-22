@@ -46,4 +46,8 @@ class NFARuleBook < Struct.new(:rules)
   def rules_for(state, character)
     rules.select { |rule| rule.applies_to?(state, character) }
   end
+
+  def alphabet
+    rules.map(&:character).compact.uniq
+  end
 end

@@ -1,3 +1,5 @@
+require './nfa.rb'
+
 module Pattern
   def bracket(outer_precedence)
     if precedence < outer_precedence
@@ -9,6 +11,10 @@ module Pattern
 
   def inspect
     "/#{self}/"
+  end
+
+  def matches?(string)
+    to_nfa_design.accepts?(string)
   end
 end
 
@@ -22,6 +28,14 @@ class Empty
   def precedence
     3
   end
+
+  def to_nfa_design
+    start_state = Object.new
+    accept_states = [start_state]
+    rulebook = NFARuleBook.new([])
+
+    NFADesign.new(start_state, accept_states, rulebook)
+  end
 end
 
 class Literal < Struct.new(:character)
@@ -33,6 +47,15 @@ class Literal < Struct.new(:character)
 
   def precedence
     3
+  end
+
+  def to_nfa_design
+    start_state = Object.new
+    accept_state = Object.new
+    rule = FARule.new(start_state, character, accept_state)
+    rulebook = NFARuleBook.new([rule])
+
+    NFADesign.new(start_state, [accept_state], rulebook)
   end
 end
 
